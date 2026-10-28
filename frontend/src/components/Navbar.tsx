@@ -3,21 +3,24 @@ import { Link } from "react-router";
 // Opciones del menú de docs/img. Solo Inicio tiene una ruta implementada.
 const workshopLinks = [
   { label: "Inicio", icon: "⌂", to: "/" },
-  { label: "Analizar obra", icon: "▧" },
-  { label: "Mi galería", icon: "▣" },
-  { label: "Mi progreso", icon: "▥" },
-  { label: "Mis ejercicios", icon: "✎" },
-  { label: "Recursos", icon: "♧" },
-  { label: "Mi perfil", icon: "◉" },
+  { label: "Analizar obra", icon: "▧", to: "/analize-image" },
+  { label: "Mi galería", icon: "▣", to: "/galery" },
+  { label: "Mi progreso", icon: "▥", to: "/progress" },
+  { label: "Mis ejercicios", icon: "✎", to: "/exercise" },
+  { label: "Mi perfil", icon: "◉", to: "/profile" },
 ];
 
 function WorkshopLinks() {
+  /* TODO: Hacer deteccion de solo iluminar boton en la pagina en la que estan y un hover de las otras vistas */
   return (
     <ul className="space-y-[6px]">
       {workshopLinks.map(({ label, icon, to }) => {
         const content = (
           <>
-            <span aria-hidden="true" className="w-5 shrink-0 text-center text-[19px] font-normal">
+            <span
+              aria-hidden="true"
+              className="w-5 shrink-0 text-center text-[19px] font-normal"
+            >
               {icon}
             </span>
             <span>{label}</span>
@@ -35,7 +38,6 @@ function WorkshopLinks() {
                 {content}
               </Link>
             ) : (
-              // Las vistas pendientes no enlazan a páginas inexistentes.
               <button
                 type="button"
                 disabled
@@ -63,10 +65,14 @@ export default function Navbar() {
         aria-label="El Espejo del Artista, ir al inicio"
         className="flex items-center gap-3 rounded-lg px-[6px] text-[#ffe7b9] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#ffd080]"
       >
-        <span aria-hidden="true" className="text-[34px] leading-none">🎨</span>
+        <span aria-hidden="true" className="text-[34px] leading-none">
+          🎨
+        </span>
         <span>
           <span className="block text-[22px] leading-[23px] font-bold [font-family:Georgia,serif]">
-            El Espejo<br />del Artista
+            El Espejo
+            <br />
+            del Artista
           </span>
           <span className="mt-[5px] block text-[11px] leading-4 font-normal [font-family:Georgia,serif]">
             Tu arte, con mejor perspectiva
@@ -88,7 +94,12 @@ export default function Navbar() {
       <details className="group mt-4 border-t border-[#ffffff2e] pt-3 lg:hidden">
         <summary className="flex cursor-pointer list-none items-center justify-between rounded-lg px-3 py-2 text-[#ffe7b9] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#ffd080] [&::-webkit-details-marker]:hidden">
           <span className="text-[11px] tracking-[0.16em]">MI TALLER</span>
-          <span aria-hidden="true" className="text-lg transition-transform group-open:rotate-180">⌄</span>
+          <span
+            aria-hidden="true"
+            className="text-lg transition-transform group-open:rotate-180"
+          >
+            ⌄
+          </span>
         </summary>
         <nav aria-label="Navegación móvil" className="mt-2">
           <WorkshopLinks />
@@ -98,19 +109,27 @@ export default function Navbar() {
       {/* Tarjeta inferior y flores decorativas construidas solo con Tailwind. */}
       <div className="mt-auto hidden pt-8 lg:block">
         <div className="relative isolate overflow-hidden rounded-[17px] border border-[#ffffff26] bg-[#175640] px-[15px] pt-8 pb-4 text-center font-normal">
-          <div aria-hidden="true" className="absolute -top-2 -left-3 -z-10 size-14">
+          <div
+            aria-hidden="true"
+            className="absolute -top-2 -left-3 -z-10 size-14"
+          >
             <span className="absolute top-0 left-3 size-7 rounded-full bg-[#59724b]" />
             <span className="absolute top-4 left-0 size-7 rounded-full bg-[#59724b]" />
             <span className="absolute top-5 left-7 size-7 rounded-full bg-[#59724b]" />
             <span className="absolute top-2 left-3 size-7 rounded-full bg-[#10503b]" />
           </div>
           <blockquote className="text-[17px] leading-[23px] text-[#fff0ce] italic [font-family:Georgia,serif]">
-            «El arte se crea, también<br />se aprende»
+            «El arte se crea, también
+            <br />
+            se aprende»
           </blockquote>
           <p className="mt-[19px] text-[13px] leading-[19px] text-[#c3dacf]">
             Un espacio para crecer a tu ritmo.
           </p>
-          <div aria-hidden="true" className="absolute -right-3 -bottom-2 -z-10 size-14">
+          <div
+            aria-hidden="true"
+            className="absolute -right-3 -bottom-2 -z-10 size-14"
+          >
             <span className="absolute top-0 left-3 size-7 rounded-full bg-[#59724b]" />
             <span className="absolute top-4 left-0 size-7 rounded-full bg-[#59724b]" />
             <span className="absolute top-5 left-7 size-7 rounded-full bg-[#59724b]" />

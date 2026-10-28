@@ -44,4 +44,4 @@ Proyecto basado en la creación de un sistema inteligente relacionado con el art
 ![Vista Recursos](./docs/img/08-recursos.png)
 
 ### Perfil
-![Vista Perfil](./docs/img/08-recursos.png)
+![Vista Perfil](./docs/img/09-perfil.png)

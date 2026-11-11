@@ -4,7 +4,7 @@ import { Link } from "react-router";
 const workshopLinks = [
   { label: "Inicio", icon: "⌂", to: "/" },
   { label: "Analizar obra", icon: "▧", to: "/analize-image" },
-  { label: "Mi galería", icon: "▣", to: "/galery" },
+  { label: "Mi galería", icon: "▣", to: "/gallery" },
   { label: "Mi progreso", icon: "▥", to: "/progress" },
   { label: "Mis ejercicios", icon: "✎", to: "/exercise" },
   { label: "Mi perfil", icon: "◉", to: "/profile" },

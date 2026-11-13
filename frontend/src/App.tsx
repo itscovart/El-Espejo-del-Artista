@@ -23,6 +23,8 @@ function App() {
           <Route path="/progress" element={<ProgressPage />} />;
           <Route path="/exercise" element={<ExercisePage />} />;
           <Route path="/profile" element={<ProfilePage />} />;
+          <Route path="/resources" element={<ResourcesPage />} />;
+          <Route path="/access" element={<AccessPage />} />;
         </Route>
     </Routes>
   );

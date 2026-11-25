@@ -16,7 +16,9 @@ Proyecto basado en la creación de un sistema inteligente relacionado con el art
 |:------:|:---------:|
 |Python (3.14.10)| Llenguaje de programación del backend.|
 |FastAPI| Framework para desarrollar la API REST.|
-|PostgreSQL| Sistema gestor de bases de datos relacional.|
+|MySQL| Sistema gestor de bases de datos relacional.|
+|OpenCV| Framework para leer y analizar imagenes.|
+|Numpy| Framework para manejar de manera más efectiva los números.|
 
 ## Vistas
 ### Inicio
@@ -45,3 +47,10 @@ Proyecto basado en la creación de un sistema inteligente relacionado con el art
 
 ### Perfil
 ![Vista Perfil](./docs/img/09-perfil.png)
+
+## Herramientas de Desarrollo
+- *Frontend* -> Vercel
+- *Backend* -> Render
+- *Base de datos* -> Aiven
+- *Almacenamiento* -> Cloudinary
+

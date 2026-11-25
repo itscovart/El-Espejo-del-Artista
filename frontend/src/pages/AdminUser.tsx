@@ -92,7 +92,7 @@ function searchText(value: string) {
  * incluidos 401/403; ante un fallo no confirmar cambios locales ni mostrar éxito.
  * La persistencia en base de datos corresponde al backend, nunca al navegador.
  */
-export default function CRUDUsuarios() {
+export default function AdminUser() {
   // Todos los cambios son locales: recargar o salir de esta vista restaura la muestra.
   const [users, setUsers] = useState<ManagedUser[]>(() => demoUsers.map((user) => ({ ...user })));
   const [search, setSearch] = useState("");

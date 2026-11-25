@@ -11,6 +11,7 @@ import ProfilePage from "./pages/ProfilePage";
 import ProgressPage from "./pages/ProgressPage";
 import ResourcesPage from "./pages/ResourcesPage";
 import ResultPage from "./pages/ResultPage";
+import AdminUser from "./pages/AdminUser";
 import { BACKEND_API_URL } from "./config/api";
 
 export type User = {
@@ -111,6 +112,7 @@ function App() {
           <Route path="/resources" element={<ResourcesPage />} />
         </Route>
 
+        <Route path="/users-panel" element={<AdminUser />} />
         <Route path="/access" element={<AccessPage setUser={setUser} />} />
       </Route>
     </Routes>

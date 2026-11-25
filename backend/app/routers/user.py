@@ -50,7 +50,7 @@ def crear_usuario(usuario: UsuarioCreate, db: Session = Depends(get_db)):
     return nuevo_usuario
 
 
-@router.get("/")
+@router.get("/find")
 def obtener_usuario(
     id_usuario: int | None = Query(default=None), db: Session = Depends(get_db)
 ):
@@ -67,7 +67,7 @@ def obtener_usuario(
         raise HTTPException(status_code=422, detail="Usuario no encontrado")
 
 
-@router.patch("/")
+@router.patch("/update")
 def actualizar_usuario(
     usuario: UsuarioUpdate, id_usuario: int = Query(gt=0), db: Session = Depends(get_db)
 ):
@@ -95,7 +95,7 @@ def actualizar_usuario(
     return usuario_modificar
 
 
-@router.put("/")
+@router.put("/replace")
 def reemplazar_usuario(
     usuario: UsuarioCreate, id_usuario: int = Query(gt=0), db: Session = Depends(get_db)
 ):
@@ -120,7 +120,7 @@ def reemplazar_usuario(
     return usuario_reemplazar
 
 
-@router.delete("/")
+@router.delete("/delete")
 def borrar_usuario(id_usuario: int = Query(gt=0), db: Session = Depends(get_db)):
     if id_usuario is None:
         raise HTTPException(

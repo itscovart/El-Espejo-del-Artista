@@ -13,6 +13,7 @@ class Ejercicio(Base):
     id_critica: Mapped[int] = mapped_column(
         ForeignKey("Critica.id_critica"), nullable=False
     )
+    titulo_ejercicio: Mapped[str] = mapped_column(String(100), nullable=False)
     descripcion: Mapped[str] = mapped_column(Text, nullable=False)
     estado: Mapped[str] = mapped_column(String(20), nullable=False)
     fecha_asignacion: Mapped[datetime] = mapped_column(

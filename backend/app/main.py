@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.routers import user, projects, auth
+from app.routers import user, works, auth
 
 app = FastAPI(
     title="El espejo del Artista API",
@@ -20,7 +20,7 @@ app.add_middleware(
 )
 
 app.include_router(user.router)
-app.include_router(projects.router)
+app.include_router(works.router)
 app.include_router(auth.router)
 
 

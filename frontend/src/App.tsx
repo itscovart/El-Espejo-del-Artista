@@ -24,12 +24,38 @@ export type User = {
   type: string;
 };
 
-function ProtectedRoute({ user }) {
+// TODO: Información que guardar por obra y pasara como parametro a la vistas
+export type WorkInfo = {
+  id_image: number;
+  image_title: string;
+  image_url: string;
+  image_date: string;
+};
+
+// TODO: Información del análisis que recibe el front
+export type WorkAnalisis = {};
+
+function ProtectedRouteUser({ user }) {
   if (!user) {
     return <Navigate to="/access" replace />;
   }
 
   return <Outlet />;
+}
+
+function ProtectedRouteAdmin({ user }) {
+  if (user.type === "Administrador") {
+    return <Outlet />;
+  }
+  return <Navigate to="/profile" replace />;
+}
+
+function NonProtectedRouteUser({ user }) {
+  if (user === null) {
+    return <Navigate to="/access" replace />;
+  } else {
+    return <Navigate to="/" replace />;
+  }
 }
 
 const verificarSesion = async (setUser) => {
@@ -70,15 +96,10 @@ const verificarSesion = async (setUser) => {
 };
 
 function App() {
-  const defaultUser = {
-    nombre_pila: "Prueba",
-    apellido_paterno: "ApellidoP",
-    apellido_materno: "ApellidoM",
-    correo: "prueba123@gmail.com",
-    fecha_registro: "2001-09-11T01:30:00",
-  };
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const [dataAnalisis, setDataAnalisis] = useState(null);
+  const [gallery, setGallery] = useState(null);
 
   useEffect(() => {
     const iniciarSesion = async () => {
@@ -98,11 +119,17 @@ function App() {
   return (
     <Routes>
       <Route element={<MainLayout />}>
-        <Route element={<ProtectedRoute user={user} />}>
+        <Route element={<ProtectedRouteUser user={user} />}>
+          <Route element={<ProtectedRouteAdmin user={user} />}>
+            <Route path="/users-panel" element={<AdminUser />} />
+          </Route>
           <Route path="/" element={<HomePage user={user} />} />
-          <Route path="/analize-image" element={<AnalizeImgPage />} />
-          <Route path="/result-image" element={<ResultPage />} />
-          <Route path="/gallery" element={<GalleryPage />} />
+          <Route
+            path="/analize-image"
+            element={<AnalizeImgPage user={user} />}
+          />
+          <Route path="/result-image" element={<ResultPage data={dataAnalisis} setData={setDataAnalisis} />} />
+          <Route path="/gallery" element={<GalleryPage user={user} data={gallery} setData={setGallery}/>} />
           <Route path="/progress" element={<ProgressPage />} />
           <Route path="/exercise" element={<ExercisePage />} />
           <Route
@@ -112,8 +139,9 @@ function App() {
           <Route path="/resources" element={<ResourcesPage />} />
         </Route>
 
-        <Route path="/users-panel" element={<AdminUser />} />
-        <Route path="/access" element={<AccessPage setUser={setUser} />} />
+        <Route element={<NonProtectedRouteUser user={user} />}>
+          <Route path="/access" element={<AccessPage setUser={setUser} />} />
+        </Route>
       </Route>
     </Routes>
   );

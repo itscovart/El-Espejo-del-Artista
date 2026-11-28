@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   ImagePicker,
   PageFrame,
@@ -7,10 +8,37 @@ import {
   Panel,
   SectionTitle,
 } from "./HomePage";
+import { BACKEND_API_URL } from "../config/api";
 
 // 03-analizar-obra: carga local y explicación del análisis de demostración.
-export default function AnalizeImgPage() {
-  const [title, setTitle] = useState("Paisaje mexicano");
+export default function AnalizeImgPage({ user }) {
+  const [title, setTitle] = useState("Obra");
+  const [image, setImage] = useState<string>();
+  const navigate = useNavigate();
+
+  const sendImage = async () => {
+    if (title === "") {
+      alert("mal");
+      return;
+    }
+    const response = await fetch(`${BACKEND_API_URL}/works/analize`, {
+      body: JSON.stringify({
+        user_id: user.id_user,
+        work_title: title,
+        data_url: image,
+      }),
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+    });
+
+    if (response.ok) {
+      let work = await response.json();
+      navigate(`/result-image?image_id=${work}`);
+    } else {
+      alert("Porfavor ingresa una imagen para analizar");
+    }
+  };
 
   return (
     <PageFrame>
@@ -28,7 +56,7 @@ export default function AnalizeImgPage() {
         <Panel className="xl:min-h-[530px]">
           <SectionTitle>1. Selecciona tu imagen</SectionTitle>
           <div className="mt-3">
-            <ImagePicker />
+            <ImagePicker image={image} setImage={setImage} />
           </div>
           <p className="mt-3 text-[12px] leading-5 text-[#8b7565]">
             Formatos permitidos: JPG, PNG y WEBP. Tamaño máximo: 10 MB. El
@@ -78,14 +106,19 @@ export default function AnalizeImgPage() {
             ))}
           </ol>
           <div className="mt-6 [&>a]:w-full">
+            {/*
             <PageLink to="/result-image">
               ✦ Ver demostración del análisis →
             </PageLink>
+            */}
+            {/* TODO: Ponerle estilos al boton que mandara la imagen */}
+            <input
+              type="submit"
+              value="Analizar imagen"
+              onClick={sendImage}
+              className="w-full mt-5 bg-amber-200 p-2 rounded-3xl border-amber-300 border-2 hover:bg-amber-300"
+            ></input>
           </div>
-          <p className="mt-5 text-[11px] leading-[18px] text-[#a08776]">
-            Esta es una simulación visual. El resultado muestra la obra de
-            ejemplo; no analiza la imagen que selecciones.
-          </p>
         </Panel>
       </div>
     </PageFrame>

@@ -6,14 +6,17 @@ import type { User } from "../App";
 export type ArtworkKind =
   "landscape" | "stillLife" | "portrait" | "garden" | "eye" | "house";
 
-
 /** Datos ya autorizados por la API. El contenedor entrega solo los del usuario activo.
  * No se obtienen ni se simulan sesiones dentro de estas páginas.
  * Identificadores: string. Fechas nuevas: ISO 8601. Métricas: números de 0 a 100.
  */
 export type PageUser = { id: string; name: string };
 export type AnalysisStatus = "Pendiente" | "En progreso" | "Completado";
-export type MetricValues = [contrast: number, illumination: number, balance: number];
+export type MetricValues = [
+  contrast: number,
+  illumination: number,
+  balance: number,
+];
 export type ArtworkData = {
   id: string;
   kind: ArtworkKind;
@@ -27,16 +30,37 @@ export type HomePageData = {
   recentAnalyses: RecentAnalysis[];
   tip: { title: string; description: string };
 };
-export type HomePageProps = { data?: HomePageData, user?: User};
+export type HomePageProps = { data?: HomePageData; user?: User };
+export type ImagePickerProps = {
+  compact?: boolean;
+  image: string;
+  setImage: (image: string) => void;
+};
 
 /** Presentación de fechas ISO sin desplazar el día por la zona horaria.
  * Los textos de fecha de las maquetas se conservan para compatibilidad.
  */
-export function DisplayDate({ value, options }: { value: string; options?: Intl.DateTimeFormatOptions }) {
+export function DisplayDate({
+  value,
+  options,
+}: {
+  value: string;
+  options?: Intl.DateTimeFormatOptions;
+}) {
   const date = new Date(value);
-  return <>{Number.isFinite(date.getTime())
-    ? new Intl.DateTimeFormat("es-MX", { day: "2-digit", month: "short", year: "numeric", ...options, timeZone: "UTC" }).format(date)
-    : value || "Sin fecha"}</>;
+  return (
+    <>
+      {Number.isFinite(date.getTime())
+        ? new Intl.DateTimeFormat("es-MX", {
+            day: "2-digit",
+            month: "short",
+            year: "numeric",
+            ...options,
+            timeZone: "UTC",
+          }).format(date)
+        : value || "Sin fecha"}
+    </>
+  );
 }
 
 // Piezas visuales compartidas entre las páginas para conservar la misma paleta,
@@ -199,9 +223,16 @@ export function Artwork({
   };
   // Las imágenes recibidas por props reutilizan el contenedor de las ilustraciones.
   if (imageUrl) {
-    return <img src={imageUrl} alt={decorative ? "" : imageAlt ?? titles[kind]}
-      aria-hidden={decorative || undefined} loading="lazy" decoding="async"
-      className={`block h-full w-full object-cover ${className}`} />;
+    return (
+      <img
+        src={imageUrl}
+        alt={decorative ? "" : (imageAlt ?? titles[kind])}
+        aria-hidden={decorative || undefined}
+        loading="lazy"
+        decoding="async"
+        className={`block h-full w-full object-cover ${className}`}
+      />
+    );
   }
   return (
     <svg
@@ -473,9 +504,12 @@ export function Artwork({
 }
 
 // Selector local con arrastre, validación y vista previa; no sube archivos a un servidor.
-export function ImagePicker({ compact = false }: { compact?: boolean }) {
+export function ImagePicker({
+  compact = false,
+  image,
+  setImage,
+}: ImagePickerProps) {
   const inputId = useId();
-  const [preview, setPreview] = useState("");
   const [filename, setFilename] = useState("");
   const [error, setError] = useState("");
   const readerRef = useRef<FileReader | null>(null);
@@ -495,7 +529,7 @@ export function ImagePicker({ compact = false }: { compact?: boolean }) {
     readerRef.current = reader;
     reader.onload = () => {
       if (readerRef.current !== reader) return;
-      setPreview(String(reader.result));
+      setImage(String(reader.result));
       setFilename(file.name);
       setError("");
     };
@@ -526,10 +560,10 @@ export function ImagePicker({ compact = false }: { compact?: boolean }) {
             event.target.value = "";
           }}
         />
-        {preview ? (
+        {image ? (
           <>
             <img
-              src={preview}
+              src={image}
               alt={filename}
               className={`mb-2 max-w-full rounded-lg object-contain ${compact ? "h-20" : "h-48"}`}
             />
@@ -597,14 +631,30 @@ export default function HomePage({ data, user }: HomePageProps = {}) {
     { kind: "portrait", name: "Retrato a lápiz", date: "10 oct 2026" },
     { kind: "garden", name: "Jardín al atardecer", date: "05 oct 2026" },
   ];
-  const recent: RecentAnalysis[] = (data ? data.recentAnalyses : demoRecent.map((work) => ({
-    id: work.kind, kind: work.kind, title: work.name, date: work.date, status: "Completado" as const,
-  }))).slice().sort((a, b) => (Date.parse(b.date) || 0) - (Date.parse(a.date) || 0)).slice(0, 4);
-  const userName = data ? data.user.name.trim().split(/\s+/)[0] || "artista" : "Ejemplo";
-  const tip = data ? data.tip : {
-    title: "☀️ Explora las luces y sombras",
-    description: "Una fuente de luz bien definida puede ayudarte a comprender el volumen en tus próximas obras.",
-  };
+  const recent: RecentAnalysis[] = (
+    data
+      ? data.recentAnalyses
+      : demoRecent.map((work) => ({
+          id: work.kind,
+          kind: work.kind,
+          title: work.name,
+          date: work.date,
+          status: "Completado" as const,
+        }))
+  )
+    .slice()
+    .sort((a, b) => (Date.parse(b.date) || 0) - (Date.parse(a.date) || 0))
+    .slice(0, 4);
+  const userName = data
+    ? data.user.name.trim().split(/\s+/)[0] || "artista"
+    : "Ejemplo";
+  const tip = data
+    ? data.tip
+    : {
+        title: "☀️ Explora las luces y sombras",
+        description:
+          "Una fuente de luz bien definida puede ayudarte a comprender el volumen en tus próximas obras.",
+      };
 
   return (
     <PageFrame>
@@ -644,6 +694,7 @@ export default function HomePage({ data, user }: HomePageProps = {}) {
         </div>
       </section>
 
+      {/*
       <div className="mt-[19px] grid gap-[17px] md:grid-cols-2 xl:grid-cols-[1.05fr_1fr_.8fr]">
         <Panel>
           <SectionTitle>Analiza tu obra</SectionTitle>
@@ -700,13 +751,13 @@ export default function HomePage({ data, user }: HomePageProps = {}) {
             ))}
           </ul>
         </Panel>
+        */}
+      <div className="mt-[19px] ">
         <Panel className="md:col-span-2 xl:col-span-1">
           <SectionTitle>Consejos para ti</SectionTitle>
           <div className="mt-3 rounded-[14px] border border-[#ffc5d4] bg-[#fde1e7] p-[15px] text-[13px] leading-5 text-[#85344c]">
             <p className="font-bold">{tip.title}</p>
-            <p className="mt-3">
-              {tip.description}
-            </p>
+            <p className="mt-3">{tip.description}</p>
           </div>
           <h3 className="mt-[18px] text-[18px] font-bold [font-family:Georgia,serif]">
             Accesos rápidos
